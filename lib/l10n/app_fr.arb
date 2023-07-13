@@ -1,0 +1,25 @@
+{
+    "homePage": "Page d'accueil",
+    "personalInformation": "Informations personnelles",
+    "name": "Nom",
+    "nameHint": "Entrez votre nom",
+    "email": "Email",
+    "emailHint": "Entrez votre email",
+    "dateOfBirth": "Date de naissance",
+    "requiredField": "Champ obligatoire",
+    "submitInfo": "Envoyer les informations",
+    "aboutUs": "À propos de nous",
+    "settings": "Paramètres",
+    "changeLanguage": "Changer de langue",
+    "about": "Lorem Ipsum est simplement un texte factice de l'industrie de l'impression et de la composition. Lorem Ipsum est depuis longtemps le texte factice standard de l'industrie depuis les années 1500, quand un imprimeur inconnu a pris une galerie de type et l'a mélangée pour en faire un livre d'exemples de caractères. Il a survécu non seulement à cinq siècles, mais aussi au saut dans la composition électronique, demeurant essentiellement inchangé. Il a été popularisé dans les années 1960 avec la sortie de feuilles Letraset contenant des passages du Lorem Ipsum, et plus récemment avec des logiciels de publication assistée par ordinateur comme Aldus PageMaker incluant des versions du Lorem Ipsum.",
+    "logout": "Déconnexion",
+    "reminder": "rappels"
+    
+    }
+    
+    
+    
+    
+    
+    
+    
