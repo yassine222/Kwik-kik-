@@ -26,7 +26,9 @@ class _HomePage2State extends State<HomePage2> {
                 const TabBarProperties(indicatorColor: Colors.white),
             tabs: const [Text('Summary'), Text('Savings'), Text("Ranking")],
             views: [
-              SoberTimer(),
+              Scaffold(
+                body: SoberTimer(),
+              ),
               Container(color: Colors.white),
               Container(color: Colors.white),
             ],

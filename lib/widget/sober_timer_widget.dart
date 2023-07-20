@@ -57,144 +57,219 @@ class _SoberTimerState extends State<SoberTimer>
     });
   }
 
+  String initialVal = "Quit Smoking";
+  final List<String> quitOptions = [
+    'Quit Smoking',
+    'Quit Gambling',
+    'Quit Drinking',
+  ];
+
   final CountDownController _countController = CountDownController();
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Container(
-        width: 200,
-        padding: EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.blueGrey,
-          borderRadius: BorderRadius.circular(16),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              DropdownButton<String>(
+                value: quitOptions[0],
+                items: quitOptions.map((String option) {
+                  return DropdownMenuItem<String>(
+                    value: option,
+                    child: Text(option),
+                  );
+                }).toList(),
+                onChanged: (String? newValue) {
+                  // Handle the selection of a new option here
+                  print('Selected option: $newValue');
+                  setState(() {
+                    initialVal = newValue!;
+                  });
+                },
+              ),
+            ],
+          ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircularCountDownTimer(
-              duration: 60,
-              initialDuration: 5,
-              controller: _countController,
-              width: MediaQuery.of(context).size.width / 2,
-              height: MediaQuery.of(context).size.height / 2,
-              ringColor: Colors.grey[300]!,
-              ringGradient: null,
-              fillColor: Colors.purpleAccent[100]!,
-              fillGradient: null,
-              backgroundColor: Colors.purple[500],
-              backgroundGradient: null,
-              strokeWidth: 20.0,
-              strokeCap: StrokeCap.round,
-              textStyle: TextStyle(
-                  fontSize: 33.0,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold),
-              textFormat: CountdownTextFormat.S,
-              isReverse: false,
-              isReverseAnimation: false,
-              isTimerTextShown: true,
-              autoStart: true,
-              onStart: () {},
-              onComplete: () {
-                _countController.restart(duration: 60);
-              },
-              onChange: (String timeStamp) {
-                debugPrint('Countdown Changed $timeStamp');
-              },
-              timeFormatterFunction: (defaultFormatterFunction, duration) {
-                if (duration.inSeconds == 0) {
-                  return "Start";
-                } else {
-                  return Function.apply(defaultFormatterFunction, [duration]);
-                }
-              },
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: screenWidth,
+            height: 400,
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.blueGrey,
+              borderRadius: BorderRadius.circular(18),
             ),
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircularProgressIndicator(
-                        value: _days / 365,
-                        strokeWidth: 8,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.cyan),
-                        backgroundColor: Colors.grey[300],
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: _animation.value,
-                      child: Text(
-                        '$_days days',
-                        style: TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                );
-              },
+            child: GridView.count(
+              crossAxisCount: 2,
+              padding: EdgeInsets.all(16),
+              children: [
+                CircularCountDownTimer(
+                  duration: 60,
+                  initialDuration: 5,
+                  controller: _countController,
+                  width: MediaQuery.of(context).size.width / 4,
+                  height: MediaQuery.of(context).size.height / 4,
+                  ringColor: Colors.grey[300]!,
+                  ringGradient: null,
+                  fillColor: Colors.cyan[700]!,
+                  fillGradient: null,
+                  backgroundColor: Colors.cyan[200],
+                  backgroundGradient: null,
+                  strokeWidth: 20.0,
+                  strokeCap: StrokeCap.round,
+                  textStyle: TextStyle(
+                      fontSize: 33.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  textFormat: CountdownTextFormat.S,
+                  isReverse: false,
+                  isReverseAnimation: false,
+                  isTimerTextShown: true,
+                  autoStart: true,
+                  onStart: () {},
+                  onComplete: () {
+                    _countController.restart(duration: 60);
+                  },
+                  onChange: (String timeStamp) {
+                    debugPrint('Countdown Changed $timeStamp');
+                  },
+                  timeFormatterFunction: (defaultFormatterFunction, duration) {
+                    if (duration.inSeconds == 0) {
+                      return "Start";
+                    } else {
+                      return Function.apply(
+                          defaultFormatterFunction, [duration]);
+                    }
+                  },
+                ),
+                CircularCountDownTimer(
+                  duration: 60,
+                  initialDuration: 5,
+                  controller: _countController,
+                  width: MediaQuery.of(context).size.width / 4,
+                  height: MediaQuery.of(context).size.height / 4,
+                  ringColor: Colors.grey[300]!,
+                  ringGradient: null,
+                  fillColor: Colors.cyan[700]!,
+                  fillGradient: null,
+                  backgroundColor: Colors.cyan[200],
+                  backgroundGradient: null,
+                  strokeWidth: 20.0,
+                  strokeCap: StrokeCap.round,
+                  textStyle: TextStyle(
+                      fontSize: 33.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  textFormat: CountdownTextFormat.S,
+                  isReverse: false,
+                  isReverseAnimation: false,
+                  isTimerTextShown: true,
+                  autoStart: true,
+                  onStart: () {},
+                  onComplete: () {
+                    _countController.restart(duration: 60);
+                  },
+                  onChange: (String timeStamp) {
+                    debugPrint('Countdown Changed $timeStamp');
+                  },
+                  timeFormatterFunction: (defaultFormatterFunction, duration) {
+                    if (duration.inSeconds == 0) {
+                      return "Start";
+                    } else {
+                      return Function.apply(
+                          defaultFormatterFunction, [duration]);
+                    }
+                  },
+                ),
+                CircularCountDownTimer(
+                  duration: 60,
+                  initialDuration: 5,
+                  controller: _countController,
+                  width: MediaQuery.of(context).size.width / 4,
+                  height: MediaQuery.of(context).size.height / 4,
+                  ringColor: Colors.grey[300]!,
+                  ringGradient: null,
+                  fillColor: Colors.cyan[700]!,
+                  fillGradient: null,
+                  backgroundColor: Colors.cyan[200],
+                  backgroundGradient: null,
+                  strokeWidth: 20.0,
+                  strokeCap: StrokeCap.round,
+                  textStyle: TextStyle(
+                      fontSize: 33.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  textFormat: CountdownTextFormat.S,
+                  isReverse: false,
+                  isReverseAnimation: false,
+                  isTimerTextShown: true,
+                  autoStart: true,
+                  onStart: () {},
+                  onComplete: () {
+                    _countController.restart(duration: 60);
+                  },
+                  onChange: (String timeStamp) {
+                    debugPrint('Countdown Changed $timeStamp');
+                  },
+                  timeFormatterFunction: (defaultFormatterFunction, duration) {
+                    if (duration.inSeconds == 0) {
+                      return "Start";
+                    } else {
+                      return Function.apply(
+                          defaultFormatterFunction, [duration]);
+                    }
+                  },
+                ),
+                CircularCountDownTimer(
+                  duration: 60,
+                  initialDuration: 5,
+                  controller: _countController,
+                  width: MediaQuery.of(context).size.width / 4,
+                  height: MediaQuery.of(context).size.height / 4,
+                  ringColor: Colors.grey[300]!,
+                  ringGradient: null,
+                  fillColor: Colors.cyan[700]!,
+                  fillGradient: null,
+                  backgroundColor: Colors.cyan[200],
+                  backgroundGradient: null,
+                  strokeWidth: 20.0,
+                  strokeCap: StrokeCap.round,
+                  textStyle: TextStyle(
+                      fontSize: 33.0,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                  textFormat: CountdownTextFormat.S,
+                  isReverse: false,
+                  isReverseAnimation: false,
+                  isTimerTextShown: true,
+                  autoStart: true,
+                  onStart: () {},
+                  onComplete: () {
+                    _countController.restart(duration: 60);
+                  },
+                  onChange: (String timeStamp) {
+                    debugPrint('Countdown Changed $timeStamp');
+                  },
+                  timeFormatterFunction: (defaultFormatterFunction, duration) {
+                    if (duration.inSeconds == 0) {
+                      return "Start";
+                    } else {
+                      return Function.apply(
+                          defaultFormatterFunction, [duration]);
+                    }
+                  },
+                ),
+              ],
             ),
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircularProgressIndicator(
-                        value: _minutes / 60,
-                        strokeWidth: 8,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.cyan),
-                        backgroundColor: Colors.grey[300],
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: _animation.value,
-                      child: Text(
-                        '$_minutes minutes',
-                        style: TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-            SizedBox(height: 8),
-            AnimatedBuilder(
-              animation: _animation,
-              builder: (context, child) {
-                return Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: CircularProgressIndicator(
-                        value: _seconds / 60,
-                        strokeWidth: 8,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.cyan),
-                        backgroundColor: Colors.grey[300],
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: _animation.value,
-                      child: Text(
-                        '$_seconds seconds',
-                        style: TextStyle(fontSize: 24, color: Colors.white),
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
