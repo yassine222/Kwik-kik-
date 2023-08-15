@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>1046237105054-etqa35m58q0g6s64fc1vbi9of1n6icb9.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.1046237105054-etqa35m58q0g6s64fc1vbi9of1n6icb9</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1046237105054-qgktls57nsc4f8g72cdlv87f06ncerf0.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBTdPN_ZoTbkqV61VPA9HtK3bFBujUl5bs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>1046237105054</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.welyne.com.kwikKik</string>
+	<key>PROJECT_ID</key>
+	<string>kwik-kik</string>
+	<key>STORAGE_BUCKET</key>
+	<string>kwik-kik.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:1046237105054:ios:0d6761caab47e39b34648f</string>
+</dict>
+</plist>
