@@ -6,6 +6,7 @@ import 'package:kwik_kik/widget/fields/my_check_box.dart';
 import 'package:kwik_kik/widget/fields/my_password_field.dart';
 import 'package:kwik_kik/widget/fields/my_text_form_field.dart';
 import '../../app_styles.dart';
+import '../../controller/auth_controller.dart';
 import '../../size_configs.dart';
 import '../../validators.dart';
 import '../pages.dart';
@@ -40,6 +41,19 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -69,30 +83,46 @@ class _SignUpPageState extends State<SignUpPage> {
                   child: Column(
                     children: [
                       MyTextFormField(
-                        fillColor: Colors.white,
-                        hint: 'Name',
-                        icon: Icons.person,
-                        inputAction: TextInputAction.next,
-                        inputType: TextInputType.name,
-                        focusNode: _signUpFocusNodes[0],
-                        validator: nameValidator,
-                      ),
-                      MyTextFormField(
+                          controller: emailController,
                           hint: 'Email',
                           icon: Icons.email_outlined,
                           fillColor: Colors.white,
                           inputType: TextInputType.emailAddress,
                           inputAction: TextInputAction.next,
-                          focusNode: _signUpFocusNodes[1],
+                          focusNode: _signUpFocusNodes[0],
                           validator: emailValidator),
                       MyPasswordField(
+                        hint: "Password",
+                        controller: passwordController,
                         fillColor: Colors.white,
-                        focusNode: _signUpFocusNodes[2],
+                        focusNode: _signUpFocusNodes[1],
                         validator: passwordValidator,
                       ),
+                      MyPasswordField(
+                          hint: "Confirm Password",
+                          controller: confirmPasswordController,
+                          fillColor: Colors.white,
+                          focusNode: _signUpFocusNodes[2],
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Confirm your password';
+                            }
+                            if (value != passwordController.text) {
+                              return 'Password not Match';
+                            }
+
+                            return null;
+                          }),
                       MyTextButton(
                         buttonName: 'Create Account',
-                        onPressed: onSubmit,
+                        onPressed: () {
+                          if (_signUpKey.currentState!.validate()) {
+                            AuthController.instance.register(
+                                context,
+                                emailController.text.trim(),
+                                passwordController.text.trim());
+                          }
+                        },
                         bgColor: kPrimaryColor,
                       ),
                     ],

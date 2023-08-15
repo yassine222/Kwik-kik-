@@ -32,10 +32,12 @@ dependencies:
     sdk: flutter
   flutter_localizations: 
     sdk: flutter
+
+  
   
   cupertino_icons: ^1.0.2
   intl: ^0.17.0
-  shared_preferences: ^2.1.2
+  shared_preferences: ^2.2.0
   json_theme: ^4.0.3+2
   provider: ^6.0.5
   introduction_screen: ^3.1.8
@@ -54,6 +56,31 @@ dependencies:
   contained_tab_bar_view: ^0.8.0
   simple_circular_progress_bar: ^1.0.2
   circular_countdown_timer: ^0.2.3
+  date_count_down: ^2.1.0
+  slide_countdown: ^0.6.0
+  flutter_timer_countdown: ^1.0.5
+  buttons_tabbar: ^1.3.7+1
+  font_awesome_flutter: ^10.4.0
+  
+  
+  google_nav_bar: ^5.0.6
+  url_launcher: ^6.1.11
+  flutter_feed_reaction: ^0.0.6
+  flutter_reaction_button: ^2.0.1+2
+  emoji_picker_flutter: ^1.6.1
+  flutter_emoji_feedback: ^0.1.2
+  popup_menu_2: ^0.0.7
+  like_button: ^2.0.5
+  firebase_auth: ^4.7.1
+  firebase_core: ^2.15.0
+  google_sign_in: ^6.1.4
+  flutter_facebook_auth: ^5.0.11
+  smart_alert_dialog: ^4.0.4
+  lottie: ^2.3.2
+ 
+  
+  
+  
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +92,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

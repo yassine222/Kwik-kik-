@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:kwik_kik/router/route_constants.dart';
 import 'package:kwik_kik/widget/buttons/large_icon_button.dart';
 import 'package:kwik_kik/widget/buttons/my_text_button.dart';
@@ -6,6 +7,7 @@ import 'package:kwik_kik/widget/buttons/small_text_button.dart';
 import 'package:kwik_kik/widget/fields/my_password_field.dart';
 import 'package:kwik_kik/widget/fields/my_text_form_field.dart';
 import '../../app_styles.dart';
+import '../../controller/auth_controller.dart';
 import '../../size_configs.dart';
 import '../../validators.dart';
 import '../pages.dart';
@@ -41,9 +43,18 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    double height = SizeConfig.blockSizeV!;
     SizeConfig().init(context);
 
     return Scaffold(
@@ -64,18 +75,24 @@ class _LoginPageState extends State<LoginPage> {
                   height: 10,
                 ),
                 Column(
-                  children: const [
-                    SizedBox(
+                  children: [
+                    const SizedBox(
                       height: 10,
                     ),
                     LargeIconButton(
+                      onpressed: () {
+                        AuthController.instance.signInWithGoogle(context);
+                      },
                       buttonName: 'Continue with Google',
                       iconImage: 'assets/images/auth/google_icon.png',
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     LargeIconButton(
+                      onpressed: () {
+                        AuthController.instance.signInWithFacebook(context);
+                      },
                       buttonName: 'Continue with Facebook',
                       iconImage: 'assets/images/auth/facebook_icon.png',
                     )
@@ -105,6 +122,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Column(
                             children: [
                               MyTextFormField(
+                                controller: emailController,
                                 hint: 'Email',
                                 icon: Icons.email_outlined,
                                 fillColor: kScaffoldBackground,
@@ -114,6 +132,8 @@ class _LoginPageState extends State<LoginPage> {
                                 validator: emailValidator,
                               ),
                               MyPasswordField(
+                                hint: "Password",
+                                controller: passwordController,
                                 fillColor: kScaffoldBackground,
                                 focusNode: _loginFocusNodes[1],
                                 validator: passwordValidator,
@@ -122,7 +142,10 @@ class _LoginPageState extends State<LoginPage> {
                                 buttonName: 'Login',
                                 onPressed: () {
                                   onSubmit();
-                                  Navigator.pushNamed(context, homeRoute);
+                                  AuthController.instance.login(
+                                      context,
+                                      emailController.text.trim(),
+                                      passwordController.text.trim());
                                 },
                                 bgColor: kPrimaryColor,
                               ),
@@ -135,11 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ForgotPasswordPage()));
+                          Get.offAll(const ForgotPasswordPage());
                         },
                         child: Text(
                           'Forgot Password?',

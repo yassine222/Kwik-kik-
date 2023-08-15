@@ -7,3 +7,5 @@ const String forgotPasswordRoute = "forgotPassword";
 const String onBoardingPageRoute = "boardingScreen";
 const String profilePageRoute = "profileScreen";
 const String reminderPageRoute = "reminderScreen";
+const String mainScreenPageRoute = "mainScreen";
+const String splashScreenRoute = "splashScreen";

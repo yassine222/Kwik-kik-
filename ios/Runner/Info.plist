@@ -21,6 +21,8 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
+
+	
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
@@ -43,9 +45,31 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>fb1230369678357376</string>
+	  <string>com.googleusercontent.apps.1046237105054-etqa35m58q0g6s64fc1vbi9of1n6icb9</string>
+
+    </array>
+  </dict>
+</array>
+<key>FacebookAppID</key>
+<string>1230369678357376</string>
+<key>FacebookClientToken</key>
+<string>947440f3634ed178297ea80a8814670c</string>
+<key>FacebookDisplayName</key>
+<string>kwik_kik</string>
+
+
+	
 </dict>
 </plist>

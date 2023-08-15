@@ -7,11 +7,15 @@ class MyPasswordField extends StatefulWidget {
     required this.fillColor,
     required this.focusNode,
     required this.validator,
+    required this.controller,
+    required this.hint,
   }) : super(key: key);
 
   final Color fillColor;
   final FocusNode focusNode;
   final String? Function(String?) validator;
+  final TextEditingController controller;
+  final String hint;
 
   @override
   _MyPasswordFieldState createState() => _MyPasswordFieldState();
@@ -25,6 +29,7 @@ class _MyPasswordFieldState extends State<MyPasswordField> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
+        controller: widget.controller,
         style: widget.focusNode.hasFocus
             ? kBodyText2.copyWith(color: kPrimaryColor)
             : kInputHintStyle,
@@ -38,7 +43,7 @@ class _MyPasswordFieldState extends State<MyPasswordField> {
           fillColor: widget.fillColor,
           border: kInputBorder,
           enabledBorder: kInputBorder,
-          hintText: 'Password',
+          hintText: widget.hint,
           hintStyle: kInputHintStyle,
           // contentPadding: EdgeInsets.all(0),
           suffix: Padding(

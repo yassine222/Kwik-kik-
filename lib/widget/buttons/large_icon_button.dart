@@ -6,29 +6,34 @@ class LargeIconButton extends StatelessWidget {
     Key? key,
     required this.buttonName,
     required this.iconImage,
+    this.onpressed,
   }) : super(key: key);
 
   final String buttonName, iconImage;
+  final void Function()? onpressed;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
-      child: Container(
+      onPressed: onpressed,
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      child: SizedBox(
         height: 30,
         child: Row(
           children: [
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Expanded(
               flex: 1,
-              child: Container(
-                // height: 25,
-                child: Image.asset(iconImage),
-              ),
+              child: Image.asset(iconImage),
             ),
-            SizedBox(
+            const SizedBox(
               width: 20,
             ),
             Expanded(
@@ -39,12 +44,6 @@ class LargeIconButton extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-      style: TextButton.styleFrom(
-        backgroundColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
         ),
       ),
     );

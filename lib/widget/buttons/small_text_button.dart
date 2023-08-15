@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../app_styles.dart';
 
@@ -18,10 +19,7 @@ class SmallTextButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => page),
-          );
+          Get.offAll(page);
         },
         splashColor: kSecondaryColor.withOpacity(0.2),
         borderRadius: BorderRadius.circular(12),

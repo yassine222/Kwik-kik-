@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../app_styles.dart';
 
-class MyTextFormField extends StatelessWidget {
+class MyTextFormField extends StatefulWidget {
   const MyTextFormField({
     Key? key,
     required this.hint,
@@ -11,6 +11,7 @@ class MyTextFormField extends StatelessWidget {
     required this.inputAction,
     required this.focusNode,
     required this.validator,
+    required this.controller,
   }) : super(key: key);
 
   final String hint;
@@ -20,26 +21,33 @@ class MyTextFormField extends StatelessWidget {
   final TextInputAction inputAction;
   final FocusNode focusNode;
   final String? Function(String?) validator;
+  final TextEditingController controller;
 
+  @override
+  State<MyTextFormField> createState() => _MyTextFormFieldState();
+}
+
+class _MyTextFormFieldState extends State<MyTextFormField> {
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
-        style: focusNode.hasFocus
+        controller: widget.controller,
+        style: widget.focusNode.hasFocus
             ? kBodyText2.copyWith(color: kPrimaryColor)
             : kInputHintStyle,
         cursorColor: kSecondaryColor,
-        keyboardType: inputType,
-        textInputAction: inputAction,
-        focusNode: focusNode,
-        validator: validator,
+        keyboardType: widget.inputType,
+        textInputAction: widget.inputAction,
+        focusNode: widget.focusNode,
+        validator: widget.validator,
         decoration: InputDecoration(
           filled: true,
-          fillColor: fillColor,
+          fillColor: widget.fillColor,
           border: kInputBorder,
           enabledBorder: kInputBorder,
-          hintText: hint,
+          hintText: widget.hint,
           hintStyle: kInputHintStyle,
           // contentPadding: EdgeInsets.all(0),
           // since we removed container remove content padding 0 to enable default padding for the field
@@ -59,8 +67,8 @@ class MyTextFormField extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Icon(
-                  icon,
-                  color: focusNode.hasFocus
+                  widget.icon,
+                  color: widget.focusNode.hasFocus
                       ? kPrimaryColor
                       : kSecondaryColor.withOpacity(0.5),
                 ),

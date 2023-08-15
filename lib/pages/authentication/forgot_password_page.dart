@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:kwik_kik/controller/auth_controller.dart';
 import 'package:kwik_kik/widget/buttons/my_text_button.dart';
 import 'package:kwik_kik/widget/buttons/small_text_button.dart';
 import 'package:kwik_kik/widget/fields/my_text_form_field.dart';
@@ -31,6 +33,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     });
   }
 
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     double height = SizeConfig.blockSizeV!;
@@ -44,12 +48,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: CircleAvatar(
             backgroundColor: kSecondaryColor.withOpacity(0.1),
             child: IconButton(
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back,
                 color: kSecondaryColor,
               ),
               onPressed: () {
-                Navigator.pop(context);
+                Get.offAll(LoginPage());
               },
             ),
           ),
@@ -89,17 +93,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         key: _forgotPassKey,
                         child: Column(
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
-                            Text(
+                            const Text(
                               "Enter your registered email to receive password reset instruction",
                               textAlign: TextAlign.center,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10,
                             ),
                             MyTextFormField(
+                              controller: passwordController,
                               hint: 'Email',
                               icon: Icons.email_outlined,
                               fillColor: kScaffoldBackground,
@@ -110,10 +115,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                             MyTextButton(
                               buttonName: 'Send reset link',
-                              onPressed: _onSumbit,
+                              onPressed: () {
+                                _onSumbit();
+                                AuthController.instance.resetPassword(
+                                    context, passwordController.text.trim());
+                              },
                               bgColor: kPrimaryColor,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                           ],
@@ -131,13 +140,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             'Remember password?',
                             style: kBodyText3,
                           ),
-                          SmallTextButton(
+                          const SmallTextButton(
                             buttonText: 'Login',
                             page: LoginPage(),
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 16,
                       )
                     ],
