@@ -23,12 +23,12 @@ class _SettingsPageState extends State<SettingsPage> {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
-        title: Text(translation(context).settings),
+        title: Text('settings'),
       ),
       body: Column(children: [
         DropdownButton<Language>(
           iconSize: 30,
-          hint: Text(translation(context).changeLanguage),
+          hint: Text('changeLanguage'),
           onChanged: (Language? language) async {
             if (language != null) {
               Locale _locale = await setLocale(language.languageCode);

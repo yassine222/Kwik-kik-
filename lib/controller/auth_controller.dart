@@ -1,5 +1,6 @@
 import 'dart:core';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -18,6 +19,8 @@ class AuthController extends GetxController {
   //email, password, name...
   late Rx<User?> _user;
   FirebaseAuth auth = FirebaseAuth.instance;
+  final CollectionReference _userProfileCollection =
+      FirebaseFirestore.instance.collection('userProfile');
 
   @override
   void onReady() async {
@@ -90,8 +93,17 @@ class AuthController extends GetxController {
     try {
       await auth
           .createUserWithEmailAndPassword(email: email, password: password)
-          .then((value) =>
-              sendEmailVerification(context).then((value) => logOut()));
+          .then(
+            (value) => sendEmailVerification(context).then((value) =>
+                _userProfileCollection
+                    .doc(AuthController.instance.auth.currentUser!.uid)
+                    .set(
+                  {
+                    'id': AuthController.instance.auth.currentUser!.uid,
+                    'isProfileSet': false,
+                  },
+                ).then((value) => logOut())),
+          );
     } on FirebaseAuthException catch (e) {
       Get.snackbar("About User", "User message",
           icon: const Icon(

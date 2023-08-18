@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:kwik_kik/pages/about_page.dart';
 import 'package:kwik_kik/pages/home_page2.dart';
 import 'package:kwik_kik/pages/main_page.dart';
 import 'package:kwik_kik/pages/not_found_page.dart';
 import 'package:kwik_kik/pages/pages.dart';
 import 'package:kwik_kik/pages/profile_page.dart';
-import 'package:kwik_kik/pages/reminder/reminders.dart';
 import 'package:kwik_kik/pages/settings_page.dart';
 import 'package:kwik_kik/pages/splash_screen_page.dart';
 
@@ -27,12 +25,10 @@ class CustomRouter {
         return MaterialPageRoute(builder: (_) => const OnBoardingPage());
       case loginPageRoute:
         return MaterialPageRoute(builder: (_) => const LoginPage());
-      // case reminderPageRoute:
-      //   return MaterialPageRoute(builder: (_) => const RemindersList());
+
       case signupPageRoute:
         return MaterialPageRoute(builder: (_) => const SignUpPage());
-      case aboutRoute:
-        return MaterialPageRoute(builder: (_) => const AboutPage());
+
       case settingsRoute:
         return MaterialPageRoute(builder: (_) => const SettingsPage());
       default:

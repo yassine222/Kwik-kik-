@@ -5,6 +5,8 @@ import 'package:kwik_kik/controller/auth_controller.dart';
 import 'package:kwik_kik/pages/profile_page.dart';
 import 'package:kwik_kik/pages/settings_page.dart';
 
+import '../controller/profile_controller.dart';
+
 class DrawerPage extends StatefulWidget {
   const DrawerPage({super.key});
 
@@ -15,6 +17,9 @@ class DrawerPage extends StatefulWidget {
 class _DrawerPageState extends State<DrawerPage> {
   final double _drawerIconSize = 24;
   final double _drawerFontSize = 17;
+  final UserProfileController _userProfileController =
+      Get.put(UserProfileController());
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -31,45 +36,52 @@ class _DrawerPageState extends State<DrawerPage> {
                 end: Alignment.bottomRight,
               ),
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
+            child: Obx(() {
+              final userProfile =
+                  _userProfileController.loggedInUserProfile.value;
+              if (userProfile == null) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(
-                          "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 40,
+                          backgroundImage:
+                              NetworkImage('${userProfile.imageUrl}'),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.edit, color: Colors.white),
+                          onPressed: () {
+                            Get.to(() => const ProfilePage());
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.white),
-                      onPressed: () {
-                        Get.to(() => const ProfilePage());
-                      },
+                    const SizedBox(height: 8),
+                    Text(
+                      '${userProfile.userName}',
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Text(
+                      '${userProfile.email}',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        color: Colors.white70,
+                      ),
                     ),
                   ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  AuthController.instance.auth.currentUser!.displayName ??
-                      "User Name".toString(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-                Text(
-                  AuthController.instance.auth.currentUser!.email.toString(),
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                  ),
-                ),
-              ],
-            ),
+                );
+              }
+            }),
           ),
           ListTile(
             leading: Icon(

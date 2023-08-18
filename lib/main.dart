@@ -1,29 +1,36 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/get_navigation.dart';
-import 'package:kwik_kik/pages/home_page2.dart';
-import 'package:kwik_kik/pages/main_page.dart';
-import 'package:kwik_kik/pages/pages.dart';
-import 'package:kwik_kik/pages/splash_screen_page.dart';
-import 'package:kwik_kik/router/custom_router.dart';
-import 'package:kwik_kik/router/route_constants.dart';
-import 'package:kwik_kik/theme/theme1.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'classes/language_constants.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:kwik_kik/pages/splash_screen_page.dart';
+import 'package:kwik_kik/router/custom_router.dart';
+import 'package:kwik_kik/theme/theme1.dart';
+
+import '.env';
+import 'classes/language_constants.dart';
 import 'controller/auth_controller.dart';
-import 'db/db_helper.dart';
+import 'controller/goal_controller.dart';
+import 'controller/profile_controller.dart';
 
 bool? seenOnboard;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
-  // await DBHelper.initDb();
+  Stripe.publishableKey =
+      'pk_test_51LMFodLHZU3pYILTeiDUrHatKJjthFQjAC48Hqz1OzZfQQ42aQXXkHJlOIYLUpa1BMwKv1iD834o4PUE7yZMhuNh00pbK1WHqN';
+  await Stripe.instance.applySettings();
+  await Firebase.initializeApp().then((value) {
+    Get.put(AuthController());
+    // Get.put(UserProfileController);
+    Get.lazyPut(() => UserProfileController);
+    Get.lazyPut(() => UserProfileController);
+    Get.lazyPut(() => DocumentIdController);
+  });
+
   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
   final isDark = sharedPreferences.getBool("is_dark") ?? false;
   seenOnboard = sharedPreferences.getBool('seenOnboard') ?? false;
@@ -83,8 +90,6 @@ class _MyAppState extends State<MyApp> {
               darkTheme: ThemeSettings.darkTheme,
               navigatorKey: navigatorkey,
               debugShowCheckedModeBanner: false,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
               onGenerateRoute: CustomRouter.generatedRoute,
               locale: _locale,
               home: const SplashScreen());

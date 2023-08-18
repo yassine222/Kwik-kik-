@@ -1,10 +1,20 @@
-import 'package:country_picker/country_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:intl_phone_field/country_picker_dialog.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
-import 'package:intl_phone_field/phone_number.dart';
+import 'dart:io';
 
-import '../classes/language_constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:kwik_kik/controller/auth_controller.dart';
+import 'package:kwik_kik/model/profile.dart';
+import 'package:kwik_kik/pages/home_page2.dart';
+import 'package:kwik_kik/pages/main_page.dart';
+
+import '../controller/profile_controller.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -14,8 +24,52 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  TextEditingController birthDateController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+  TextEditingController sexController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+
+  String? imageUrl;
+
+  File? image;
+
+  Timestamp? birthdatePicked;
+
   @override
-  String countryCode = "";
+  void initState() {
+    final userProfile = _userProfileController.loggedInUserProfile.value;
+    birthDateController.text =
+        DateFormat('dd-MM-yyyy').format(userProfile!.birtthDate!.toDate());
+    userNameController.text = userProfile.userName!;
+    addressController.text = userProfile.address ?? "";
+    sexController.text = userProfile.sexe!;
+    birthdatePicked = userProfile.birtthDate;
+    imageUrl = userProfile.imageUrl;
+  }
+
+  @override
+  void dispose() {
+    birthDateController.dispose();
+    userNameController.dispose();
+    sexController.dispose();
+    addressController.dispose();
+    super.dispose();
+  }
+
+  final List<String> genderItems = [
+    'Rather dont say',
+    'Male',
+    'Female',
+  ];
+
+  String? selectedValue;
+
+  final _formKey = GlobalKey<FormState>();
+
+  final UserProfileController _userProfileController =
+      Get.put(UserProfileController());
+
+  Timestamp? initialBirthate;
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -27,152 +81,301 @@ class _ProfilePageState extends State<ProfilePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Set Profile"),
+          title: const Text("Profile"),
         ),
         backgroundColor: Colors.white,
         body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(
-                margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
-                alignment: Alignment.center,
-                child: Column(
-                  children: [
-                    Form(
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            child: Stack(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(10),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(100),
-                                    border: Border.all(
-                                        width: 5, color: Colors.white),
-                                    color: Colors.white,
-                                    boxShadow: [
-                                      const BoxShadow(
-                                        color: Colors.black12,
-                                        blurRadius: 20,
-                                        offset: Offset(5, 5),
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(25, 50, 25, 10),
+            padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+            alignment: Alignment.center,
+            child: Obx(() {
+              final userProfile =
+                  _userProfileController.loggedInUserProfile.value;
+              if (userProfile == null) {
+                return Center(child: CircularProgressIndicator());
+              } else {
+                initialBirthate = userProfile.birtthDate;
+
+                return Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        child: SizedBox(
+                          height: 115,
+                          width: 115,
+                          child: Stack(
+                            fit: StackFit.expand,
+                            clipBehavior: Clip.none,
+                            children: [
+                              CircleAvatar(
+                                backgroundImage: NetworkImage(
+                                    imageUrl ?? userProfile.imageUrl!),
+                              ),
+                              Positioned(
+                                right: -16,
+                                bottom: 0,
+                                child: SizedBox(
+                                  height: 46,
+                                  width: 46,
+                                  child: TextButton(
+                                    style: TextButton.styleFrom(
+                                      foregroundColor: Colors.cyan,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(50),
+                                        side: BorderSide(color: Colors.white),
                                       ),
-                                    ],
-                                  ),
-                                  child: const FittedBox(
-                                    fit: BoxFit.contain,
-                                    child: CircleAvatar(
-                                      radius: 50,
-                                      backgroundColor: Colors.white,
-                                      foregroundImage: NetworkImage(
-                                              "https://cdn4.iconfinder.com/data/icons/evil-icons-user-interface/64/avatar-512.png")
-                                          as ImageProvider,
+                                      backgroundColor: Color(0xFFF5F6F9),
                                     ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(90, 90, 0, 0),
-                                    child: const Icon(
-                                      Icons.add_circle,
-                                      size: 25.0,
+                                    onPressed: () {
+                                      pickImage();
+                                    },
+                                    child: Icon(
+                                      Icons.camera,
                                       color: Colors.cyan,
                                     ),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          TextFormField(
-                            decoration: InputDecoration(
-                              labelText: translation(context).name,
-                            ),
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return "Please enter your user name";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          TextFormField(
-                            decoration: InputDecoration(labelText: "Text"),
-                            keyboardType: TextInputType.phone,
-                            validator: (val) {
-                              if (val!.isEmpty) {
-                                return "Please enter your mobile number";
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 20.0),
-                          IntlPhoneField(
-                            pickerDialogStyle: PickerDialogStyle(
-                                countryNameStyle: const TextStyle(
-                                  color: Colors.black,
-                                ),
-                                countryCodeStyle: const TextStyle(
-                                  color: Colors.black,
-                                )),
-                            decoration: const InputDecoration(
-                              labelText: 'Phone Number',
-                              border: OutlineInputBorder(),
-                            ),
-                            initialCountryCode: 'US',
-                            onChanged: (PhoneNumber number) {
-                              print(number.completeNumber);
-                            },
-                          ),
-                          const SizedBox(height: 15.0),
-                          const SizedBox(height: 20.0),
-                          Container(
-                            child: ElevatedButton(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                                child: Text(
-                                  "Save".toUpperCase(),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
                               ),
-                              onPressed: () {},
-                            ),
+                            ],
                           ),
-                          const SizedBox(height: 25.0),
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                            //child: Text('Don\'t have an account? Create'),
-                            child: Text.rich(TextSpan(children: [
-                              TextSpan(
-                                text: 'Cancel',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary),
-                              ),
-                            ])),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      TextFormField(
+                        controller: userNameController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.person,
+                          ),
+                          prefixIconColor: Colors.cyan,
+                          contentPadding: const EdgeInsets.all(16),
+                          hintText: 'Enter Your User Name.',
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      DropdownButtonFormField2<String>(
+                        value: '${userProfile.sexe}',
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(FontAwesomeIcons.venusMars),
+                          prefixIconColor: Colors.cyan,
+                          // Add Horizontal padding using menuItemStyleData.padding so it matches
+                          // the menu padding when button's width is not specified.
+                          contentPadding:
+                              const EdgeInsets.symmetric(vertical: 16),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          // Add more decoration..
+                        ),
+                        hint: const Text(
+                          'Select Your Gender',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        items: genderItems
+                            .map((item) => DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ))
+                            .toList(),
+                        validator: (value) {
+                          if (value == null) {
+                            return 'Please select gender.';
+                          }
+                          return null;
+                        },
+                        onChanged: (value) {
+                          sexController.text = value!;
+                        },
+                        onSaved: (value) {
+                          selectedValue = value.toString();
+                        },
+                        buttonStyleData: const ButtonStyleData(
+                          padding: EdgeInsets.only(right: 8),
+                        ),
+                        iconStyleData: const IconStyleData(
+                          icon: Icon(
+                            Icons.arrow_drop_down,
+                            color: Colors.black45,
+                          ),
+                          iconSize: 24,
+                        ),
+                        dropdownStyleData: DropdownStyleData(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        menuItemStyleData: const MenuItemStyleData(
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: birthDateController,
+                        onTap: () async {
+                          DateTime? pickedDate = await pickBirthDate(context);
+
+                          if (pickedDate != null) {
+                            print(
+                                pickedDate); //pickedDate output format => 2021-03-10 00:00:00.000
+                            String formattedDate =
+                                DateFormat('dd-MM-yyyy').format(pickedDate);
+                            print(
+                                formattedDate); //formatted date output using intl package =>  2021-03-16
+                            setState(() {
+                              birthdatePicked = Timestamp.fromDate(pickedDate);
+                              birthDateController.text =
+                                  formattedDate; //set output date to TextField value.
+                            });
+                          }
+                        },
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.date_range),
+                          prefixIconColor: Colors.cyan,
+                          contentPadding: const EdgeInsets.all(16),
+                          hintText: 'Enter Your Birth Date',
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      TextFormField(
+                        controller: addressController,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(Icons.place),
+                          prefixIconColor: Colors.cyan,
+                          contentPadding: const EdgeInsets.all(16),
+                          hintText: 'Enter Your Adress.',
+                          hintStyle: const TextStyle(fontSize: 14),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      ElevatedButton(
+                        onPressed: () {
+                          _userProfileController.updateProfile(
+                            UserProfile(
+                                id: AuthController
+                                    .instance.auth.currentUser!.uid,
+                                userName: userNameController.text,
+                                email: userProfile.email,
+                                imageUrl: imageUrl,
+                                sexe: sexController.text,
+                                birtthDate: birthdatePicked,
+                                updatedAt: Timestamp.now(),
+                                createdAt: userProfile.createdAt,
+                                address: addressController.text),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary:
+                              Colors.cyan, // Set the background color to cyan
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                20), // Set the border radius
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 20),
+                          child: Text(
+                            'Save',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            }),
           ),
         ),
       ),
     );
+  }
+
+  Future<DateTime?> pickBirthDate(BuildContext context) {
+    return showDatePicker(
+        builder: (context, child) {
+          bool isDark = Theme.of(context).brightness == Brightness.dark;
+          return Theme(
+            data: !isDark
+                ? Theme.of(context).copyWith(
+                    colorScheme: const ColorScheme.light(
+                      primary: Colors.cyan, // <-- SEE HERE
+                      onPrimary: Colors.white, // <-- SEE HERE
+                      onSurface: Colors.cyan, // <-- SEE HERE
+                    ),
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.cyan, // button text color
+                      ),
+                    ),
+                  )
+                : Theme.of(context).copyWith(
+                    colorScheme: const ColorScheme.dark(
+                      primary: Colors.white, // <-- SEE HERE
+                      onPrimary: Colors.black, // <-- SEE HERE
+                      onSurface: Colors.white, // <-- SEE HERE
+                    ),
+                    textButtonTheme: TextButtonThemeData(
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white, // button text color
+                      ),
+                    ),
+                  ),
+            child: child!,
+          );
+        },
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1950),
+        //DateTime.now() - not to allow to choose before today.
+        lastDate: DateTime(2100));
+  }
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker()
+          .pickImage(source: ImageSource.gallery, imageQuality: 1);
+
+      if (image == null) return;
+      final imageTemp = File(image.path);
+      Reference ref = FirebaseStorage.instance
+          .ref('profileImages')
+          .child(AuthController().auth.currentUser!.uid);
+      await ref.putFile(imageTemp);
+      ref.getDownloadURL().then((value) {
+        setState(() {
+          imageUrl = value;
+        });
+        print(value);
+      });
+
+      setState(() {
+        this.image = imageTemp;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
   }
 }

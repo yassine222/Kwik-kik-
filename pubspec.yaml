@@ -77,6 +77,14 @@ dependencies:
   flutter_facebook_auth: ^5.0.11
   smart_alert_dialog: ^4.0.4
   lottie: ^2.3.2
+  cloud_firestore: ^4.8.4
+  dropdown_button2: ^2.1.4
+  image_picker: ^1.0.2
+  firebase_storage: ^11.2.6
+  flutter_credit_card: ^3.0.7
+  flutter_stripe: ^9.3.0
+  cart_stepper: ^4.1.2
+  input_quantity: ^1.2.3
  
   
   

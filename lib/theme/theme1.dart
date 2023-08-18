@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/countries.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeSettings extends ChangeNotifier {
@@ -28,6 +27,7 @@ class ThemeSettings extends ChangeNotifier {
 
   static ThemeData get lightTheme {
     return ThemeData.light().copyWith(
+      colorScheme: ColorScheme.light(primary: Colors.cyan),
       canvasColor: Colors.white,
       dividerColor: Colors.white,
       drawerTheme: const DrawerThemeData(backgroundColor: Colors.cyan),

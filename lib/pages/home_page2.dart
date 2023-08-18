@@ -6,7 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:kwik_kik/controller/auth_controller.dart';
 import 'package:kwik_kik/pages/drawer_page.dart';
-import 'package:kwik_kik/widget/drawer_widget.dart';
+import 'package:kwik_kik/pages/write_forum_post.dart';
 
 import 'package:kwik_kik/widget/sober_timer_widget.dart';
 
@@ -52,7 +52,9 @@ class _HomePage2State extends State<HomePage2> {
           child: FloatingActionButton(
               backgroundColor: Colors.cyan,
               child: const Icon(FontAwesomeIcons.comment),
-              onPressed: () {}),
+              onPressed: () {
+                Get.bottomSheet(ForumPostForm());
+              }),
         );
       }),
       drawer: const DrawerPage(),
